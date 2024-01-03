@@ -2,6 +2,7 @@
 	import Counter from './Counter.svelte';
 	import welcome from '$lib/images/svelte-welcome.webp';
 	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	import { v4 } from 'uuid';
 </script>
 
 <svelte:head>
@@ -10,22 +11,23 @@
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+	<h1>Superforms debug app</h1>
+	<p>Description: the submitting store will be stuck as true forever in certaint cases</p>
+	<p>Repro steps:</p>
+	<ol>
+		<li>Load this page "fresh" in a browser session</li>
+		<li>
+			<a href={`/${v4()}`}>Open form page</a> (client side navigation)
+		</li>
+		<li>Submit form</li>
+		<li>
+			The submit will return a 303 to a different url with the same form. This form is "stuck" with
+			$submtting = true forever
+		</li>
+	</ol>
+	<p>
+		The issue does not occur if you open the form page directly, omitting the client side navigation
+	</p>
 </section>
 
 <style>
